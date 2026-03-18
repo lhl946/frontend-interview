@@ -1,6 +1,7 @@
-import React, { useMemo } from "react";
+import React, { memo, useMemo } from "react";
 import { Booking, BookingStatus } from "@/types";
 import { useAppContext } from "@/context/AppContext";
+import css from "./RoomRow.module.css";
 
 const COLUMN_WIDTH_PX = 48;
 
@@ -22,18 +23,17 @@ const STATUS_COLORS: Record<BookingStatus, string> = {
   cancelled: "#F44336",
 };
 
-export function RoomRow({
+function _RoomRow({
   rowId,
   rowName,
   bookings,
   visibleStartIndex,
   visibleEndIndex,
-  totalDays,
   onBookingClick,
 }: RoomRowProps) {
   console.log("render", rowId);
 
-  const { hoveredCell, setHoveredCell, config } = useAppContext();
+  const { config } = useAppContext();
 
   const visibleBookings = useMemo(() => {
     return bookings
@@ -66,18 +66,8 @@ export function RoomRow({
       });
   }, [bookings, visibleStartIndex, visibleEndIndex, config.dateRangeStart]);
 
-
-  const isHovered = hoveredCell?.rowId === rowId;
-
   return (
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        borderBottom: "1px solid #eee",
-        background: isHovered ? "#f0f7ff" : "white",
-      }}
-    >
+    <div className={css.roomRow}>
       <div
         style={{
           width: 140,
@@ -99,23 +89,14 @@ export function RoomRow({
           { length: visibleEndIndex - visibleStartIndex + 1 },
           (_, i) => {
             const dayIndex = visibleStartIndex + i;
-            const isCellHovered =
-              hoveredCell?.rowId === rowId &&
-              hoveredCell?.dayIndex === dayIndex;
             return (
               <div
                 key={dayIndex}
                 style={{
-                  position: "absolute",
                   left: (dayIndex - visibleStartIndex) * COLUMN_WIDTH_PX,
                   width: COLUMN_WIDTH_PX,
-                  height: 40,
-                  background: isCellHovered ? "#e3f2fd" : "transparent",
-                  borderRight: "1px solid #f0f0f0",
-                  cursor: "default",
                 }}
-                onMouseEnter={() => setHoveredCell({ rowId, dayIndex })}
-                onMouseLeave={() => setHoveredCell(null)}
+                className={css.dayCell}
               />
             );
           },
@@ -164,3 +145,6 @@ export function RoomRow({
     </div>
   );
 }
+
+export const RoomRow = memo(_RoomRow);
+

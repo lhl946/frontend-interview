@@ -1,0 +1,22 @@
+.roomRow {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    background-color: white;
+}
+
+.roomRow:hover {
+    background-color: #f0f7ff;
+}
+
+.dayCell {
+    position: absolute;
+    height: 40px;
+    background: transparent;
+    border-right: 1px solid #f0f0f0;
+    cursor: default;
+}
+
+.dayCell:hover {
+    background-color: #e3f2fd;
+}
