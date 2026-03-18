@@ -34,35 +34,28 @@ function _RoomRow({
   console.log("render", rowId);
 
   const { config } = useAppContext();
+  const MS_PER_DAY = 1000 * 60 * 60 * 24;
 
   const visibleBookings = useMemo(() => {
+    const rangeStartMs = new Date(config.dateRangeStart).getTime();
+
     return bookings
-      .filter((b) => {
-        const startDay = Math.floor(
-          (new Date(b.checkIn).getTime() -
-            new Date(config.dateRangeStart).getTime()) /
-            (1000 * 60 * 60 * 24),
-        );
-        const endDay = Math.floor(
-          (new Date(b.checkOut).getTime() -
-            new Date(config.dateRangeStart).getTime()) /
-            (1000 * 60 * 60 * 24),
-        );
-        return endDay >= visibleStartIndex && startDay <= visibleEndIndex;
-      })
       .map((b) => {
         const startDay = Math.floor(
-          (new Date(b.checkIn).getTime() -
-            new Date(config.dateRangeStart).getTime()) /
-            (1000 * 60 * 60 * 24),
+          (new Date(b.checkIn).getTime() - rangeStartMs) / MS_PER_DAY,
         );
         const endDay = Math.floor(
-          (new Date(b.checkOut).getTime() -
-            new Date(config.dateRangeStart).getTime()) /
-            (1000 * 60 * 60 * 24),
+          (new Date(b.checkOut).getTime() - rangeStartMs) / MS_PER_DAY,
         );
-        const color = STATUS_COLORS[b.status] ?? "#ccc";
-        return { booking: b, startDay, endDay, color };
+        return {
+          booking: b,
+          startDay,
+          endDay,
+          color: STATUS_COLORS[b.status] ?? "#ccc",
+        };
+      })
+      .filter(({ startDay, endDay }) => {
+        return endDay >= visibleStartIndex && startDay <= visibleEndIndex;
       });
   }, [bookings, visibleStartIndex, visibleEndIndex, config.dateRangeStart]);
 
@@ -147,4 +140,3 @@ function _RoomRow({
 }
 
 export const RoomRow = memo(_RoomRow);
-
