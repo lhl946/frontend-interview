@@ -1,7 +1,5 @@
+import { COLUMN_WIDTH_PX, VISIBLE_COLUMNS } from '@/constant'
 import { useState, useCallback } from 'react'
-
-const COLUMN_WIDTH_PX = 48
-const VISIBLE_COLUMNS = 14
 
 interface VisibleRange {
   startIndex: number

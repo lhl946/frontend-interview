@@ -3,9 +3,7 @@ import { Booking, RoomUnit } from "@/types";
 import { useVisibleRange } from "@/hooks/useVisibleRange";
 import { RoomRow } from "./RoomRow";
 import { useAppContext } from "@/context/AppContext";
-
-const COLUMN_WIDTH_PX = 48;
-const TOTAL_DAYS = 30;
+import { COLUMN_WIDTH_PX, TOTAL_DAYS } from "@/constant";
 
 interface BookingGridProps {
   roomUnits: RoomUnit[];

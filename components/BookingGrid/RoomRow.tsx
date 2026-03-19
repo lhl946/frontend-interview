@@ -2,8 +2,7 @@ import React, { memo, useMemo } from "react";
 import { Booking, BookingStatus } from "@/types";
 import { useAppContext } from "@/context/AppContext";
 import css from "./RoomRow.module.css";
-
-const COLUMN_WIDTH_PX = 48;
+import { COLUMN_WIDTH_PX } from "@/constant";
 
 interface RoomRowProps {
   rowId: string;

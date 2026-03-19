@@ -5,6 +5,7 @@
 3. 打开 Booking Detail 弹窗时 RoomRow 组件重复渲染
 4. visibleBookings 代码重复代码有点多
 5. ticketId 来源混乱
+6. 常量没有集中管理，COLUMN_WIDTH_PX 在不同的文件中重复定义了。
 
 ## 应用的修复
 
@@ -13,6 +14,7 @@
 3. 在点击 RoomCell 并打开 Booking Detail 弹窗时发现控制台一直输出 render，经排查发现是 BookingGrid 没有添加 memo。还有就是 BookingGrid 中 `const roomBookings = bookings.filter(b => b.roomUnit.roomId === room.id)` 这段代码一直在返回新数组，所以添加了 memo 和 useMemo。
 4. visibleBookings 代码重复代码有点多，让ai简化了一下
 5. `const currentTicketId = (router.query.ticketId as string) ?? initialTicketId ?? activeTicketId` 有来自url的，有来自props，也有来自context的，不确定是否会有一些三个状态更新时机不一致而导致的bug。而且这样维护起来也麻烦，所以直接使用了url上的参数。
+6. 新建一个文件集中管理项目中的常量
 
 ## 权衡取舍
 
@@ -21,6 +23,7 @@
 3. 无
 4. 无
 5. 对于问题5，不知是否业务上确实有这样的需要，使用多个数据来源，至少目前没有看到。
+6. 无
 
 ## 如果有更多时间
 
@@ -29,3 +32,4 @@
 3. 无
 4. 无
 5. 在解决问题5的时候，发现 MessageContext 中 currentHouse 没有被其他地方使用，再看要不要删掉。
+6. 无
