@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import type { GetServerSideProps, NextPage } from 'next'
+import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
 import { Ticket } from '@/types'
@@ -11,9 +11,9 @@ interface MessagesPageProps {
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
 
-const MessagesPage: NextPage<MessagesPageProps> = ({ initialTicketId }) => {
+const MessagesPage: NextPage<MessagesPageProps> = () => {
   const router = useRouter()
-  const { activeTicketId, setActiveTicketId, setUnreadCount } = useMessagesContext()
+  const { setUnreadCount } = useMessagesContext()
   const { data: tickets } = useSWR<Ticket[]>('/api/tickets', fetcher)
 
   // Sync unread count into context
@@ -24,7 +24,7 @@ const MessagesPage: NextPage<MessagesPageProps> = ({ initialTicketId }) => {
   }, [tickets, setUnreadCount])
 
   // Use ticketId from URL or prop
-  const currentTicketId = (router.query.ticketId as string) ?? initialTicketId ?? activeTicketId
+  const currentTicketId = (router.query.ticketId as string)
 
   const handleTicketClick = (ticket: Ticket) => {
     router.push(`/messages?ticketId=${ticket.id}&houseId=${ticket.houseId}`)
@@ -123,15 +123,6 @@ const MessagesPage: NextPage<MessagesPageProps> = ({ initialTicketId }) => {
       </div>
     </div>
   )
-}
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const ticketId = (context.query.ticketId as string) ?? null
-  return {
-    props: {
-      initialTicketId: ticketId,
-    },
-  }
 }
 
 export default MessagesPage
